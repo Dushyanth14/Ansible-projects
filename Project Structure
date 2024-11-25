@@ -1,8 +1,0 @@
-ansible-project/
-├── playbooks/
-│   └── user.yml
-├── vars/
-│   └── user_vars.yml
-└── tasks/
-    └── create_user.yml
-    └── set_password.yml
