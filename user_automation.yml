@@ -106,7 +106,7 @@
         - create_user is defined      
 
 
-     - name: Not confirmed to create user
+     - name: user not confirmed to create user
        debug:
          msg: "User not confirmed to create user {{ usrname }}"
        when:
