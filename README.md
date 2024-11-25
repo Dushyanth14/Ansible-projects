@@ -20,5 +20,25 @@ Ansible User Management Automation is a simple yet powerful project that automat
    ```bash
    git clone https://github.com/yourusername/ansible-user-management.git
 
+## Install Ansible if it's not already installed:
+pip install ansible
+
+## Prepare your inventory file (hosts.txt) to define the target machines.
+
+## How to Use
+1. Modify the hosts.txt file to list the target hosts you want to manage.
+
+2. Run the Ansible playbook with the following command:
+   ansible-playbook -i hosts.txt user_automation.yml
+
+## Execution
+ $ ansible-playbook -i hosts.txt user_automation.yml
+ - Enter the username to be checked: (USER NAME)
+ - user (user name) does not exist
+
+- Enter yes to create user: yes
+- Enter the user id: 67890
+- Enter the password: ********
+- User johndoe created with UID 67890 and password set.
 
 
