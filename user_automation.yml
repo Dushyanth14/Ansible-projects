@@ -1,0 +1,114 @@
+---
+ - hosts: localhost
+   ignore_errors: yes
+   become: yes
+   tasks:
+     - name: Getting User input for username
+       pause:
+         prompt: "Enter the username to be checked"
+       register: urnam
+
+     - name: Capturing the userinput
+       set_fact:
+         usrname: "{{ urnam['user_input'] }}"      
+
+
+     - name: Displaying the usermame to be checked
+       debug:
+         msg: "{{ usrname }}"
+
+     - name: Check whether user exsists
+       shell:
+         "getent passwd {{ usrname }}"
+       register: usrentr
+
+     - name: Display details of useren entry
+       set_fact:
+         usr_ent_lin: "{{ usrentr['stdout_lines']|length }}"      
+
+     - name: Confirming user exsists
+       debug:
+         msg: "user {{ usrname }} exsists"
+       when:
+         - usr_ent_lin|int == 1
+
+     - name: Displaying details of exsistsing user
+       shell:
+         "chage -l {{ usrname }}"
+       when:
+         - usr_ent_lin|int == 1
+       register: agedetails
+
+     - name: Displaying dteails of user
+       debug:
+         msg: "{{ agedetails['stdout_lines'] }}"
+       when:
+         - usr_ent_lin|int == 1      
+
+     - name: Confirming user doesn't exists
+       debug:
+         msg: "user {{ usrname }}  doenst exsists"     
+       when:
+         - usr_ent_lin|int == 0
+
+     - name: OPtio for user
+       pause:
+         prompt: "ENter yes to create user"
+       register: opt_usr
+       when:
+        - usr_ent_lin|int == 0
+
+     - name: User input for id
+       pause:
+         prompt: "Enter the user id"
+       register: uid_inp
+       when:
+         - usr_ent_lin|int == 0       
+
+     - name: Creating user
+       user:
+        name: "{{ usrname }}"  
+        uid: "{{ uid_inp['user_input'] }}"
+        state: present
+       register: create_user
+       when:
+        - opt_usr is defined       
+        - opt_usr['user_input'] == "yes"
+        - usr_ent_lin|int == 0
+
+     - name: Displaying details of user
+       shell:
+          "getent passwd {{ usrname }}"
+       register: deta_user
+       when:
+         - usr_ent_lin|int == 0
+         - create_user is defined
+       
+     - name: Displaying detailes of created user
+       debug:
+         msg: "{{ deta_user }}"
+       when:
+         - usr_ent_lin|int == 0
+         - deta_user is defined          
+
+     - name: Taking input for password
+       pause:
+         prompt: "ENter the passwotd"
+         echo: no
+       register: pas
+       when:
+        - deta_user is defined
+     - name:  Now setting passwotd
+       shell:
+         "echo {{ pas['user_input'] }}|passwd {{ usrname }} --stdin"  
+       when:
+        - pas is defined
+        - create_user is defined      
+
+
+     - name: Not confirmed to create user
+       debug:
+         msg: "User not confirmed to create user {{ usrname }}"
+       when:
+         - opt_usr is defined
+         - opt_usr['user_inpng ut'] !=  "yes"
