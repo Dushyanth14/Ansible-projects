@@ -39,6 +39,6 @@ pip install ansible
 - Enter yes to create user: yes
 - Enter the user id: 67890
 - Enter the password: ********
-- User johndoe created with UID 67890 and password set.
+- User (suer name) created with UID 67890 and password set.
 
 
