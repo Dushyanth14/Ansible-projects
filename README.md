@@ -18,7 +18,7 @@ Ansible User Management Automation is a simple yet powerful project that automat
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/yourusername/ansible-user-management.git
+   git clone https://github.com/yDushyanth14/ansible-user-management.git
 
 ## Install Ansible if it's not already installed:
 pip install ansible
